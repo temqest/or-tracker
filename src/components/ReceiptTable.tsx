@@ -189,10 +189,21 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                 />
               </th>
 
+              {/* Date */}
+              <th 
+                onClick={() => onSort('date')}
+                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group whitespace-nowrap"
+              >
+                <div className="flex items-center space-x-1">
+                  <span>Date</span>
+                  {renderSortIcon('date')}
+                </div>
+              </th>
+
               {/* OR-Number */}
               <th 
                 onClick={() => onSort('orNumber')}
-                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group"
+                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group whitespace-nowrap"
               >
                 <div className="flex items-center space-x-1">
                   <span>OR-Number</span>
@@ -203,22 +214,11 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
               {/* Assessment No */}
               <th 
                 onClick={() => onSort('assessmentNo')}
-                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group"
+                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group whitespace-nowrap"
               >
                 <div className="flex items-center space-x-1">
                   <span>Assessment No</span>
                   {renderSortIcon('assessmentNo')}
-                </div>
-              </th>
-
-              {/* Date */}
-              <th 
-                onClick={() => onSort('date')}
-                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group"
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Date</span>
-                  {renderSortIcon('date')}
                 </div>
               </th>
 
@@ -233,6 +233,17 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                 </div>
               </th>
 
+              {/* Amount */}
+              <th 
+                onClick={() => onSort('amount')}
+                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group text-right whitespace-nowrap"
+              >
+                <div className="flex items-center justify-end space-x-1">
+                  <span>Amount</span>
+                  {renderSortIcon('amount')}
+                </div>
+              </th>
+
               {/* Branch */}
               <th 
                 onClick={() => onSort('branch')}
@@ -244,21 +255,10 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                 </div>
               </th>
 
-              {/* Status */}
-              <th 
-                onClick={() => onSort('status')}
-                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group text-center"
-              >
-                <div className="flex items-center justify-center space-x-1">
-                  <span>Status</span>
-                  {renderSortIcon('status')}
-                </div>
-              </th>
-
               {/* Case No. */}
               <th 
                 onClick={() => onSort('caseNo')}
-                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group"
+                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group whitespace-nowrap"
               >
                 <div className="flex items-center space-x-1">
                   <span>Case No.</span>
@@ -266,14 +266,14 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                 </div>
               </th>
 
-              {/* Amount */}
+              {/* Status */}
               <th 
-                onClick={() => onSort('amount')}
-                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group text-right"
+                onClick={() => onSort('status')}
+                className="py-3 px-3 cursor-pointer hover:text-neutral-700 transition group text-center whitespace-nowrap"
               >
-                <div className="flex items-center justify-end space-x-1">
-                  <span>Amount</span>
-                  {renderSortIcon('amount')}
+                <div className="flex items-center justify-center space-x-1">
+                  <span>Status</span>
+                  {renderSortIcon('status')}
                 </div>
               </th>
 
@@ -281,7 +281,7 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
               <th className="py-3 px-3">Remarks</th>
 
               {/* Actions */}
-              <th className="py-3 px-3 text-right">Actions</th>
+              <th className="py-3 px-3 text-right whitespace-nowrap">Actions</th>
             </tr>
           </thead>
 
@@ -304,13 +304,16 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                 return (
                   <tr
                     key={receipt.id}
-                    onDoubleClick={() => onView(receipt)}
-                    className={`hover:bg-neutral-50/80 transition-colors py-2.5 ${
+                    onClick={() => onView(receipt)}
+                    className={`hover:bg-neutral-50/90 transition-colors py-2.5 cursor-pointer ${
                       isSelected ? 'bg-blue-50/40' : ''
                     }`}
                   >
                     {/* Checkbox */}
-                    <td className="py-3 px-3 text-center">
+                    <td 
+                      className="py-3 px-3 text-center"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <input
                         type="checkbox"
                         checked={isSelected}
@@ -320,24 +323,21 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                       />
                     </td>
 
-                    {/* OR-Number */}
-                    <td className="py-3 px-3 font-mono font-semibold text-neutral-900">
-                      <button
-                        onClick={() => onView(receipt)}
-                        className="text-[#007AFF] hover:underline cursor-pointer text-left focus:outline-none"
-                      >
-                        {receipt.orNumber}
-                      </button>
-                    </td>
-
-                    {/* Assessment No */}
-                    <td className="py-3 px-3 font-mono text-neutral-500">
-                      {receipt.assessmentNo}
-                    </td>
-
                     {/* Date */}
                     <td className="py-3 px-3 text-neutral-600 whitespace-nowrap">
                       {formatDate(receipt.date)}
+                    </td>
+
+                    {/* OR-Number */}
+                    <td className="py-3 px-3 font-mono font-semibold text-neutral-900 whitespace-nowrap">
+                      <span className="text-[#007AFF] hover:underline font-semibold">
+                        {receipt.orNumber}
+                      </span>
+                    </td>
+
+                    {/* Assessment No */}
+                    <td className="py-3 px-3 font-mono text-neutral-500 whitespace-nowrap">
+                      {receipt.assessmentNo}
                     </td>
 
                     {/* Name of Payor */}
@@ -345,24 +345,24 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                       {receipt.payorName}
                     </td>
 
+                    {/* Amount */}
+                    <td className="py-3 px-3 font-mono font-semibold text-neutral-900 text-right tabular-nums whitespace-nowrap">
+                      {formatCurrency(receipt.amount)}
+                    </td>
+
                     {/* Branch */}
                     <td className="py-3 px-3 text-neutral-600 max-w-[140px] truncate" title={receipt.branch}>
                       {receipt.branch}
                     </td>
 
-                    {/* Status */}
-                    <td className="py-3 px-3 text-center whitespace-nowrap">
-                      {getStatusBadge(receipt.status)}
-                    </td>
-
                     {/* Case No. */}
-                    <td className="py-3 px-3 font-mono text-neutral-700">
+                    <td className="py-3 px-3 font-mono text-neutral-700 whitespace-nowrap">
                       {receipt.caseNo}
                     </td>
 
-                    {/* Amount */}
-                    <td className="py-3 px-3 font-mono font-semibold text-neutral-900 text-right tabular-nums">
-                      {formatCurrency(receipt.amount)}
+                    {/* Status */}
+                    <td className="py-3 px-3 text-center whitespace-nowrap">
+                      {getStatusBadge(receipt.status)}
                     </td>
 
                     {/* Remarks */}
@@ -371,7 +371,10 @@ export const ReceiptTable: React.FC<ReceiptTableProps> = ({
                     </td>
 
                     {/* Actions */}
-                    <td className="py-3 px-3 text-right whitespace-nowrap">
+                    <td 
+                      className="py-3 px-3 text-right whitespace-nowrap"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <div className="flex items-center justify-end space-x-1">
                         <button
                           type="button"

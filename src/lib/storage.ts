@@ -30,6 +30,44 @@ export function saveReceipts(receipts: ReceiptRecord[]): boolean {
   }
 }
 
+export const DEFAULT_BRANCHES: string[] = [];
+
+const BRANCHES_STORAGE_KEY = 'legal_or_tracker_branches';
+
+export function loadBranches(): string[] {
+  if (typeof window === 'undefined') return DEFAULT_BRANCHES;
+  try {
+    const raw = localStorage.getItem(BRANCHES_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(BRANCHES_STORAGE_KEY, JSON.stringify(DEFAULT_BRANCHES));
+      return DEFAULT_BRANCHES;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_BRANCHES;
+  } catch (err) {
+    console.error('Failed to load branches from localStorage:', err);
+    return DEFAULT_BRANCHES;
+  }
+}
+
+export function saveBranches(branches: string[]): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    localStorage.setItem(BRANCHES_STORAGE_KEY, JSON.stringify(branches));
+    return true;
+  } catch (err) {
+    console.error('Failed to save branches to localStorage:', err);
+    return false;
+  }
+}
+
+export function resetToDefaultBranches(): string[] {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(BRANCHES_STORAGE_KEY, JSON.stringify(DEFAULT_BRANCHES));
+  }
+  return DEFAULT_BRANCHES;
+}
+
 export function resetToDefaultReceipts(): ReceiptRecord[] {
   if (typeof window !== 'undefined') {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_RECEIPTS));

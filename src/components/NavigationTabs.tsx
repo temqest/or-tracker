@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { LayoutGrid, Receipt, FileSpreadsheet, Building2 } from 'lucide-react';
+import { LayoutGrid, Receipt, FileSpreadsheet, Building2, Settings } from 'lucide-react';
 
-export type SubTab = 'overview' | 'receipts' | 'assessments' | 'branches';
+export type SubTab = 'overview' | 'receipts' | 'assessments' | 'branches' | 'settings';
 
 interface NavigationTabsProps {
   currentTab: SubTab;
@@ -19,6 +19,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
     { id: 'receipts' as SubTab, label: 'Official Receipts', icon: Receipt },
     { id: 'assessments' as SubTab, label: 'Assessments', icon: FileSpreadsheet },
     { id: 'branches' as SubTab, label: 'Branch Summary', icon: Building2 },
+    { id: 'settings' as SubTab, label: 'Settings', icon: Settings },
   ];
 
   return (

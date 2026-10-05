@@ -16,6 +16,7 @@ interface FilterToolbarProps {
   onResetFilters: () => void;
   resultCount: number;
   totalCount: number;
+  branchOptions?: string[];
 }
 
 export const FilterToolbar: React.FC<FilterToolbarProps> = ({
@@ -23,9 +24,14 @@ export const FilterToolbar: React.FC<FilterToolbarProps> = ({
   onFilterChange,
   onResetFilters,
   resultCount,
-  totalCount
+  totalCount,
+  branchOptions = BRANCH_OPTIONS
 }) => {
   const [showDatePanel, setShowDatePanel] = useState(false);
+
+  const filterBranches = branchOptions.includes('All Branches')
+    ? branchOptions
+    : ['All Branches', ...branchOptions];
 
   const hasActiveFilters = 
     Boolean(filters.searchQuery) ||
@@ -75,7 +81,7 @@ export const FilterToolbar: React.FC<FilterToolbarProps> = ({
           aria-label="Filter by branch"
           className="text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-700 font-medium focus:outline-none focus:border-[#4361EE] focus:ring-2 focus:ring-[#4361EE]/15 cursor-pointer shadow-2xs"
         >
-          {BRANCH_OPTIONS.map((b) => (
+          {filterBranches.map((b) => (
             <option key={b} value={b}>
               {b}
             </option>

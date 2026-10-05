@@ -15,24 +15,28 @@ export const BarChartCard: React.FC<BarChartCardProps> = ({ receipts }) => {
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   
+  const currentYear = new Date().getFullYear();
+  const currentMonthIdx = new Date().getMonth();
+
   const monthlyData = months.map((m, idx) => {
     const monthNum = (idx + 1).toString().padStart(2, '0');
-    const matched = receipts.filter(r => r.date && r.date.includes(`-${monthNum}-`));
-    const realSum = matched.reduce((sum, r) => sum + (r.amount || 0), 0);
-
-    const baseline = [220000, 260000, 340000, 280000, 390000, 310000, 720000, 480000, 350000, 620000, 310000, 390000][idx];
-    const amount = realSum > 0 ? realSum : baseline;
-    const heightPercent = Math.min(100, Math.max(18, (amount / 750000) * 100));
-
+    const matched = receipts.filter(r => r.date && (r.date.includes(`-${monthNum}-`) || r.date.startsWith(`${currentYear}-${monthNum}`)));
+    const amount = matched.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
     return {
       month: m,
-      amount,
-      heightPercent
+      amount
     };
   });
 
+  const maxAmount = Math.max(...monthlyData.map(d => d.amount), 1);
+  const chartData = monthlyData.map(d => ({
+    ...d,
+    heightPercent: d.amount > 0 ? Math.max(12, Math.min(100, (d.amount / maxAmount) * 100)) : 6
+  }));
+
   const total = monthlyData.reduce((acc, curr) => acc + curr.amount, 0);
-  const avgPerMonth = Math.round(total / 12);
+  const activeMonthsCount = monthlyData.filter(m => m.amount > 0).length || 1;
+  const avgPerMonth = Math.round(total / (activeMonthsCount || 1));
 
   return (
     <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-[0_2px_12px_rgba(0,0,0,0.02)] flex flex-col justify-between h-full">
@@ -76,7 +80,7 @@ export const BarChartCard: React.FC<BarChartCardProps> = ({ receipts }) => {
       {/* Bar Chart Area */}
       <div className="relative pt-8 pb-1">
         <div className="h-44 flex items-end justify-between gap-1.5 sm:gap-2.5 px-1">
-          {monthlyData.map((item, idx) => {
+          {chartData.map((item, idx) => {
             const isHovered = hoveredMonth === idx;
             return (
               <div 
